@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'application'
 }
 
 group 'com.adrianhoelzl'
@@ -23,6 +24,11 @@ compileKotlin {
         freeCompilerArgs = ["-Xinline-classes", "-Xopt-in=kotlin.RequiresOptIn"]
     }
 }
+
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+application {
+    mainClassName = "com.adrianhoelzl.ninedarter.MainKt"
 }

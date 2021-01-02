@@ -1,3 +1,5 @@
+package com.adrianhoelzl.ninedarter
+
 /**
  * A darts run, i.e., a sequence of scored fields.
  *
@@ -9,7 +11,7 @@ inline class DartsRun(
 
 	companion object {
 		/**
-		 * Determine a maximal run of a given [length], i.e., a run that contains only triple-20 fields and finished
+		 * Determine a maximal run of a given [length], i.e., a run that contains only triple-20 fields and finishes
 		 * with the inner bull's eye.
 		 *
 		 * @param length the length of the run

@@ -1,6 +1,7 @@
+package com.adrianhoelzl.ninedarter
+
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.runBlocking
 
 /**
  * The points to score in a single leg.
@@ -14,7 +15,7 @@ const val POINTS_TO_SCORE = 501
  * @return a flow of all nine-darter runs
  */
 @FlowPreview
-private fun determineAllNineDarterRuns(): Flow<DartsRun> = determineAllNineDarterRunsWithPrefix(emptyDartsRun())
+fun determineAllNineDarterRuns(): Flow<DartsRun> = determineAllNineDarterRunsWithPrefix(emptyDartsRun())
 
 
 /**
@@ -24,32 +25,20 @@ private fun determineAllNineDarterRuns(): Flow<DartsRun> = determineAllNineDarte
  * @return a flow of all nine-darter runs starting with the [dartsRun]
  */
 @FlowPreview
-private fun determineAllNineDarterRunsWithPrefix(dartsRun: DartsRun): Flow<DartsRun> = flow {
+private fun determineAllNineDarterRunsWithPrefix(dartsRun: DartsRun): Flow<DartsRun> {
 	// emit the run, if it is a nine-darter
 	if (dartsRun.isNineDarter()) {
-		emit(dartsRun)
-		return@flow
+		return flowOf(dartsRun)
 	}
 
 	// cancel the calculation if no nine-darter can be reached with the current prefix
 	if (!dartsRun.isPotentialRealPrefixOfNineDarterRun()) {
-		return@flow
+		return emptyFlow()
 	}
 
 	// otherwise, descend one level into the tree
 	val childrenRuns = ALL_FIELDS.map { dartsRun + it }
-	emitAll(childrenRuns.asFlow().flatMapMerge {
+	return childrenRuns.asFlow().flatMapMerge {
 		determineAllNineDarterRunsWithPrefix(it)
-	})
-}
-
-
-@FlowPreview
-fun main() {
-	val allNineDarterRuns = determineAllNineDarterRuns()
-	runBlocking {
-		allNineDarterRuns.collectIndexed { index, value ->
-			println("${index + 1}: $value")
-		}
 	}
 }
